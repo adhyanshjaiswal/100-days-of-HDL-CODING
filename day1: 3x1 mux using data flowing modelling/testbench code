@@ -1,0 +1,27 @@
+module mux_3x1_tb;
+  reg[0:1] ta;
+  reg [0:1]tb;
+  reg [0:1]tc;
+  reg ts1,ts0;
+  wire [0:1]ty;
+  
+  mux_3x1 mux(.a(ta),.b(tb),.c(tc),.s0(ts0),.s1(ts1),.y(ty));
+  
+  initial
+    begin
+      
+      $monitor($time,"ts1=%b,ts0=%b,  ty=%b",ts1,ts0,ty);
+      #10 ta=3;tb=0;tc=0; ts1=0; ts0=0;
+      #10 ta=1;tb=1;tc=1; ts1=0; ts0=1;
+      #10 ta=3;tb=3;tc=2; ts1=1; ts0=0;
+      #10 ta=3;tb=0;tc=0; ts1=0; ts0=0;
+      #10 ta=1;tb=1;tc=1; ts1=0; ts0=1;
+      #10 ta=3;tb=3;tc=2; ts1=1; ts0=0;
+      #30 $finish;
+    end
+  initial
+    begin
+      $dumpfile("dump.vcd");
+      $dumpvars;
+    end
+endmodule
