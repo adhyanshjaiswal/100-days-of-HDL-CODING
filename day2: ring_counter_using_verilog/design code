@@ -1,1 +1,17 @@
+module ring_counter (
+    input wire clk,
+    input wire reset, // active high reset
+    output reg [3:0] y
+);
+
+always @(posedge clk or posedge reset) begin
+    if (reset) begin
+        y <= 4'b1000; // initialize the ring counter to 0001 on reset
+    end else begin
+      y <= {y[0], y[3:1]}; // shift left and wrap around
+    end
+end
+
+endmodule
+
 
