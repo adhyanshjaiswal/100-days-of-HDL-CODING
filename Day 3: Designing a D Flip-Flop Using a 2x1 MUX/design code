@@ -1,0 +1,15 @@
+module d_ff_by_mux(input D,CLK,
+                   output reg Q2);
+  
+  
+  wire QP1,Q1;
+  
+  
+  assign Q1 = (CLK) ? D : QP1;  //mux 1 
+  
+  
+  always @(posedge CLK) //mux 2
+    begin
+      Q2 <= Q1;
+    end
+endmodule
