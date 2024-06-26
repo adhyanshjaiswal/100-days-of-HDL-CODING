@@ -1,0 +1,32 @@
+module t_ff_mux_tb;
+  
+  reg T,CLK,QP2;
+  wire Q2;
+  
+  t_ff_mux t_mux(.T(T),.CLK(CLK),.Q2(Q2),.QP2(QP2));
+  
+  always #10 CLK=~CLK;
+  
+  initial
+    begin
+      CLK=0;
+      T=0;
+      QP2=0;
+      $monitor("time=%0t, CLK=%0d, T=%0d, Q2=%0d",$time,T,CLK,Q2);
+      #10 T=0;
+      #10 T=1;
+      
+    end
+  
+  initial
+    begin
+      #60 $finish;
+    end
+  
+  initial
+    begin
+      $dumpfile("dump.vcd");
+      $dumpvars;
+    end
+endmodule
+      
