@@ -1,0 +1,26 @@
+module t_ff_mux(input T,CLK,QP2,
+                output reg Q2,reg D);
+  
+  wire MUX1_OUTPUT;
+  
+  always @(*)
+    begin
+      if(T==0 && Q2==0)
+        D=0;
+      else if(T==0 && Q2==1)
+        D=1;
+      else if(T==1 && Q2==0)
+        D=1;
+      else
+        D=0;
+    end
+  
+  assign MUX1_OUTPUT=(CLK) ? D : QP2;
+  
+  
+  always @(posedge CLK)
+    begin
+      Q2 <= MUX1_OUTPUT;
+    end
+  
+endmodule
