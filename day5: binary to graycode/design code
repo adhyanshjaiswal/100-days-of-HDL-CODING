@@ -1,0 +1,9 @@
+module binary_graycode(input [3:0] binary,
+                       output [3:0] graycode);
+  
+  
+  assign graycode[3]=binary[3];
+  assign graycode[2]=binary[3]^binary[2];
+  assign graycode[1]=binary[2]^binary[1];
+  assign graycode[0]=binary[1]^binary[0];
+endmodule
