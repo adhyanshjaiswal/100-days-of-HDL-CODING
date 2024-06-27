@@ -1,0 +1,22 @@
+module half_adder_by_decoder_2x4_tb;
+  reg ta,tb,tE;
+  wire ty0,ty1,ty2,ty3, sum,carry;
+  
+  half_adder_by_decoder_2x4 h_d(.a(ta),.b(tb),.E(tE),.y0(ty0),.y1(ty1),.y2(ty2),.y3(ty3),.sum(sum),.carry(carry));
+  
+  initial
+    begin
+      tE=1;	
+      $monitor("time=%0d, E=%0d, a=%0d,b=%0d,  y0=%0d,y1=%0d,y2=%0d,y3=%0d,sum=%0d,carry=%0d,",$time,tE,ta,tb,ty0,ty1,ty2,ty3,sum,carry);
+      #10 ta=0;tb=0;
+      #10 ta=0;tb=1;
+      #10 ta=1;tb=0;
+      #10 ta=1;tb=1;
+    end
+  
+  initial
+    begin
+      $dumpfile("dump.vcd");
+      $dumpvars;
+    end
+endmodule
