@@ -1,0 +1,13 @@
+module half_adder_by_decoder_2x4(input a,b,E,
+                                 output y0,y1,y2,y3,sum,carry);
+  
+  assign y0=~a*~b*E;
+  assign y1=~a*b*E;
+  assign y2=a*~b*E;
+  assign y3=a*b*E;
+  
+  assign sum=y1+y2;
+  assign carry=y3;
+  
+  
+endmodule
