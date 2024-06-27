@@ -1,0 +1,21 @@
+module graycode_binarytb;
+  reg [3:0] tgraycode;
+  wire [3:0] tbinary;
+  
+  graycode_binary g_b(.graycode(tgraycode),.binary(tbinary));
+  
+  initial
+    begin
+      $monitor("time=%0t,  graycode=%0b, binary=%0b",$time,tgraycode,tbinary);
+      #10 tgraycode=4'b1011;
+      #10 tgraycode=4'b1010;
+      #10 tgraycode=4'b1001;
+      #10 tgraycode=4'b1000;
+    end
+  
+  initial
+    begin
+      $dumpfile("dump.vcd");
+      $dumpvars;
+    end
+endmodule
