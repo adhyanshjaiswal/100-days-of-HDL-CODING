@@ -1,0 +1,22 @@
+module demux_1x4_tb;
+  reg i,s0,s1;
+  wire y0,y1,y2,y3;
+  
+  demux_1x4 demux(.i(i),.s0(s0),.s1(s1),.y0(y0),.y1(y1),.y2(y2),.y3(y3));
+  
+  initial
+    begin
+      i=1;
+      $monitor("time=%0t , s0=%0d,s1=%0d,y0=%0d,y1=%0d,y2=%0d,y3=%0d",$time,s0,s1,y0,y1,y2,y3);
+      #10 s0=0; s1=0;
+      #10 s0=0; s1=1;
+      #10 s0=1; s1=0;
+      #10 s0=1; s1=1;
+    end
+  
+  initial
+    begin
+      $dumpfile("dump.vcd");
+      $dumpvars;
+    end
+endmodule
