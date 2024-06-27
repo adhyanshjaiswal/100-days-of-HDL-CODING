@@ -1,0 +1,26 @@
+module mux_tb;
+  reg ta,tb,tc,td,ts0,ts1;
+  wire ty;
+  
+  mux_4x1 mux(.a(ta),.b(tb),.c(tc),.d(td),.s0(ts0),.s1(ts1),.y(ty));
+  
+  initial
+    begin
+      ta=0;
+      tb=1;
+      tc=0;
+      td=1;
+      $monitor("time=%0t, ts0=%0d,ts1=%0d,  ty=%0d",$time,ts0,ts1,ty);
+      #10 ts0=0; ts1=0;
+      #10 ts0=0; ts1=1;
+      #10 ts0=1; ts1=0;
+      #10 ts0=1; ts1=1;
+    end
+  
+  initial
+    begin
+      $dumpfile("dump.vcd");
+      $dumpvars;
+    end
+  
+endmodule
