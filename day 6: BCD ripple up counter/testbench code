@@ -1,0 +1,33 @@
+module tb_bcd_counter;
+
+  reg clk;
+  reg rst;
+  wire [3:0] q;
+
+  bcd_counter uut (
+    .clk(clk),
+    .rst(rst),
+    .q(q)
+  );
+
+  initial begin
+    clk = 0;
+    forever #5 clk = ~clk; 
+  end
+
+  initial begin
+    rst = 1;
+    #15;
+    rst = 0; 
+
+    #100 $finish;
+  end
+
+  initial begin
+    $monitor("Time=%0t, rst=%b, q=%b (%0d)", $time, rst,q, q);
+  end
+  initial begin
+    $dumpfile("dump.vcd");
+    $dumpvars;
+  end
+endmodule
