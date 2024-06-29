@@ -1,0 +1,26 @@
+module mux2_1(input i0,i1,s,
+              output y);
+  wire w1,w2,w3;
+  
+  and a1(w1,i0,s);
+  not n1(w2,s);
+  and a2(w3,w2,i1);
+  
+  or o1(y,w1,w3);
+endmodule
+
+
+module mux4_1(input i0,i1,i2,i3,i4,i5,i6,i7,s0,s1,s2,
+              output y);
+  
+  wire w1,w2,w3,w4,w5,w6;
+  
+  mux2_1 mux1(i0,i1,s0,w1);
+  mux2_1 mux2(i2,i3,s0,w2);
+  mux2_1 mux3(i4,i5,s0,w3);
+  mux2_1 mux4(i6,i7,s0,w4);
+  mux2_1 mux5(w1,w2,s1,w5);
+  mux2_1 mux6(w3,w4,s1,w6);
+  mux2_1 mux7(w5,w6,s2,y);
+endmodule
+    
