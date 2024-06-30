@@ -1,0 +1,17 @@
+module DFF (input  CLK,RESET,D,
+            output Q,reg QN);
+  
+  assign Q=~QN;
+
+  always @(posedge CLK or posedge RESET) 
+    begin
+      if (RESET) 
+      begin
+        QN <= 1'b0;     
+      end 
+    else 
+      begin
+        QN = D;
+      end
+    end
+endmodule
