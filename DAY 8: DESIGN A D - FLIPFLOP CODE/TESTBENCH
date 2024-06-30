@@ -1,0 +1,45 @@
+module _DFF;
+
+  reg CLK;
+  reg RESET;
+  reg D;
+  wire Q;
+  wire QN;
+
+  DFF uut (
+    .CLK(CLK),
+    .RESET(RESET),
+    .D(D),
+    .Q(Q),
+    .QN(QN)
+  );
+
+  // Clock generation
+  initial begin
+    CLK = 0;
+    forever #5 CLK = ~CLK; // 10 time units clock period
+  end
+
+  // Test stimulus
+  initial begin
+    // Monitor the signals
+    $monitor("Time=%0d CLK=%b RESET=%b D=%b Q=%b QN=%b", $time, CLK, RESET, D, Q, QN);
+    
+    // Apply test vectors
+    RESET = 1; D = 0;
+    #10 RESET = 0; D = 0;
+    #10 D = 1;
+    #10 D = 0;
+    #10 D = 1;
+    #10 RESET = 1;
+    #10 RESET = 0; D = 0;
+    #10 D = 1;
+    #10 $stop;
+  end
+  initial
+    begin
+      $dumpfile("dump.vcd");
+      $dumpvars;
+    end
+
+endmodule
