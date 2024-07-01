@@ -1,0 +1,28 @@
+module sr_ff_tb;
+  reg ts,tr,tclk;
+  wire tq,tqb;
+  
+  sr_ff ff(.s(ts),.r(tr),.clk(tclk),.q(tq),.qb(tqb));
+  
+  always #10 tclk=~tclk;
+  initial
+    begin
+      tclk=0;
+      $monitor("Time=%0t, s=%0d, r=%0d, q=%0d, qb=%0d",$time,ts,tr,tq,tqb);
+      
+      #10 ts=0;tr=1;
+      #20 ts=1;tr=0;
+      #20 ts=1;tr=1;
+      #20 ts=0;tr=0;
+      #10 $finish;
+    end
+  
+  initial
+    begin
+      $dumpfile("dump.vcd");
+      $dumpvars;
+    end
+  
+endmodule
+    
+  
