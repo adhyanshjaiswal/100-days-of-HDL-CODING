@@ -1,0 +1,40 @@
+module jk_flipflop_by_case(input j,k,clk,reset,
+                           output reg q,reg qbar);
+  
+  always @(posedge clk or posedge reset)
+    begin
+      if (reset) 
+        begin
+          q<=0;
+          qbar<=1;
+          $display("------- RESET PHASE -------");
+        end
+      else
+        begin
+          case({j,k})
+            2'b00 :  begin
+              q<=q;
+              qbar<=qbar;
+              //$display("-------hold case-------");
+            end
+            2'b01: begin
+              q<=0;
+              qbar<=1;
+              //$display("-------reset case-------");
+            end
+            2'b10: begin
+              q<=1;
+              qbar<=0;
+              //$display("-------set case-------");
+            end
+            2'b11: begin
+              q<=~q;
+              qbar<=~qbar;
+              //$display("-------toggle case-------");
+            end
+          endcase
+          
+        end
+    end
+  
+endmodule
