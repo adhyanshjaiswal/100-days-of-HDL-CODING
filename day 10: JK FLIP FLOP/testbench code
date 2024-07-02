@@ -1,0 +1,30 @@
+module jk_flipflop_by_case_tb;
+  reg tj,tk,tclk,treset;
+  wire tq,tqbar;
+  
+  jk_flipflop_by_case jk(.clk(tclk),.reset(treset),.j(tj),.k(tk),.q(tq),.qbar(tqbar));
+  
+  always #10 tclk=~tclk;
+  
+  initial
+    begin
+      tclk=0;
+      treset=0;
+      $monitor("time=%0d,reset=%0d,  tj=%0d,tk=%0d,  tq=%0d,tqbar=%0d",$time,treset,tj,tk,tq,tqbar);
+      #10 tj=0; tk=0;
+      #20 treset=1;
+      #20 treset=0;
+      #20 tj=0; tk=0;
+      #20 tj=0; tk=1;
+      #20 tj=1; tk=0;
+      #20 tj=1; tk=1;
+      #20 tj=0; tk=0;
+      #30 $finish;
+    end
+  
+  initial
+    begin
+      $dumpfile("dump.vcd");
+      $dumpvars;
+    end
+endmodule
