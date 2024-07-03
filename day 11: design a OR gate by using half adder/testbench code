@@ -1,0 +1,23 @@
+module or_by_using_half_adder_tb;
+  reg ta,tb;
+  wire tsum,tcarry;
+  
+  or_by_using_half_adder or_ha(.a(ta),.b(tb),.sum(tsum),.carry(tcarry));
+  
+  initial
+    begin
+      $monitor("a=%d, b=%0d  ->  sum=%0d carry=%0d",ta,tb,tsum,tcarry);
+      #10 ta=0; tb=0;
+      #10 ta=0; tb=1;
+      #10 ta=1; tb=0;
+      #10 ta=1; tb=1;
+      #10 $finish;
+      
+    end
+  
+  initial
+    begin
+      $dumpfile("dump.vcd");
+      $dumpvars;
+    end
+endmodule
