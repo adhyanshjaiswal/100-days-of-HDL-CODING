@@ -1,0 +1,17 @@
+module full_subtractor_by_nand_gate(input a,b,c,
+                                    output d,bout);
+  
+  wire x1,a1,a2;
+  
+  //difference
+  assign x1=a^b;
+  assign d=x1^c;
+  
+  //borrow
+  assign a1=~a*b;
+  assign a2=~x1*c;
+  assign bout=a1+a2;
+  
+  
+endmodule
+  
