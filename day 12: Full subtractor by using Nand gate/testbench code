@@ -1,0 +1,26 @@
+module full_subtractor_by_nand_gate_tb;
+  reg ta,tb,tc;
+  wire td,tbout;
+  
+  full_subtractor_by_nand_gate fs(.a(ta),.b(tb),.c(tc),.d(td),.bout(tbout));
+  
+  initial
+    begin
+      $monitor("a=%0d,b=%0d,c=%0d,  d=%0d, bout=%0d",ta,tb,tc,td,tbout);
+      #10 ta=0;tb=0;tc=0;
+      #10 ta=0;tb=0;tc=1;
+      #10 ta=0;tb=1;tc=0;
+      #10 ta=0;tb=1;tc=1;
+      #10 ta=1;tb=0;tc=0;
+      #10 ta=1;tb=0;tc=1;
+      #10 ta=1;tb=1;tc=0;
+      #10 ta=1;tb=1;tc=1;
+    end
+  
+  initial
+    begin
+      $dumpfile("dump.vcd");
+      $dumpvars;
+    end
+  
+endmodule
