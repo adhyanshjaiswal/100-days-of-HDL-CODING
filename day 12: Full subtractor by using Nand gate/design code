@@ -1,0 +1,22 @@
+module full_subtractor_by_nand_gate(input a,b,c,
+                                    output d,bout);
+  
+  wire n1,n2,n3,n4,n5,n6,n7;
+  
+ //xor -> a^b 
+  nand nb1(n1,a,b);
+  nand nb2(n2,a,n1);
+  nand nb3(n3,b,n1);
+  nand nb4(n4,n3,n2);
+  
+  //xor-> a^b^c
+  nand nb5(n5,n4,c);
+  nand nb6(n6,n5,n4);
+  nand nb7(n7,n5,c);
+  nand diff(d,n6,n7);
+    
+  //borrow 
+  nand borrow(bout,n7,n3);
+  
+endmodule
+  
