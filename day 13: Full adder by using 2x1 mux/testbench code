@@ -1,0 +1,26 @@
+module full_adder_by_2x1_mux_tb;
+  reg ta,tb,tc;
+  wire tsum,tcarry;
+  
+  full_adder_by_2x1_mux fa(.a(ta),.b(tb),.c(tc),.sum(tsum),.carry(tcarry));
+  
+  initial
+    begin
+      $monitor("a=%0d,b=%0d,c=%0d,  sum=%0d, carry=%0d",ta,tb,tc,tsum,tcarry);
+          ta=0; tb=0; tc=0;
+      #10 ta=0; tb=0; tc=1;
+      #10 ta=0; tb=1; tc=0;
+      #10 ta=0; tb=1; tc=1;
+      #10 ta=1; tb=0; tc=0;
+      #10 ta=1; tb=0; tc=1;
+      #10 ta=1; tb=1; tc=0;
+      #10 ta=1; tb=1; tc=1;
+    end
+  
+  initial
+    begin
+      $dumpfile("dump.vcd");
+      $dumpvars;
+    end
+  
+endmodule
