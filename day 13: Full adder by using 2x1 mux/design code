@@ -1,0 +1,19 @@
+module full_adder_by_2x1_mux(input a,b,c,
+                             output sum,carry);
+  
+  wire sw1,sw2,sw3,cw1,cw2;
+  
+  assign sw1=~b*1;
+  assign sw2=~a*b + a*~b;
+  
+  assign sw3=~sw2*1;
+  
+  assign sum = sw2*~c + sw3*c;
+  
+  assign cw1=a*b;
+  assign cw2=sw2*c;
+  
+  assign carry=cw2*~cw1 + 1*cw1;
+  
+  
+endmodule
