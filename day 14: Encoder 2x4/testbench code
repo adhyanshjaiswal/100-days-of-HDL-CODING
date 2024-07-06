@@ -1,0 +1,24 @@
+module tb_encoder4_2;
+  reg y0,y1,y2,y3;
+  wire a,b;
+  
+  encoder4_2 en(.y0(y0),.y1(y1),.y2(y2),.y3(y3),.a(a),.b(b));
+  
+  initial 
+    begin
+      $monitor($time,"y0=%b,y1=%b,y2=%b,y3=%b,a=%b,b=%b",y0,y1,y2,y3,a,b);
+      
+      #10 y0=1;y1=0;y2=0;y3=0; 
+      #10 y0=0;y1=1;y2=0;y3=0; 
+      #10 y0=0;y1=0;y2=1;y3=0; 
+      #10 y0=0;y1=0;y2=0;y3=1; 
+      
+      #20 $finish;
+      
+    end
+  initial
+    begin
+      $dumpfile("dump.vcd");
+      $dumpvars;
+    end
+endmodule
