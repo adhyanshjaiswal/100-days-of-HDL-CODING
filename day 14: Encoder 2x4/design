@@ -1,0 +1,6 @@
+module encoder4_2(input y0,y1,y2,y3,
+                  output a,b);
+  
+  or o1(a,y3,y1);
+  or o2(b,y3,y2);
+endmodule
