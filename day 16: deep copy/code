@@ -1,0 +1,79 @@
+class verilog_datatypes;
+  string reg_datatype;
+  string wire_datatype;
+  
+  function new();
+    reg_datatype="x";
+    wire_datatype="z";
+  endfunction
+  
+  function verilog_datatypes v_copy;
+    v_copy.reg_datatype=this.reg_datatype;
+    v_copy.wire_datatype=this.wire_datatype;
+  endfunction
+endclass
+
+class system_verilog_datatypes;
+  int bit_datatype;
+  string byte_datatype;
+  
+  
+  verilog_datatypes vd;
+  function new();
+    bit_datatype=0;
+    byte_datatype="x";
+    vd=new();
+  endfunction
+  
+  function void display();
+    $display("---------------------------------");
+    $display("        [verilog dataype]        ");
+    $display("default value of reg=%0s, wire=%0s",vd.reg_datatype,vd.wire_datatype);
+    $display("---------------------------------");
+    $display("      [system verilog dataype]    ");
+    $display("default value of bit=%0d, byte=%0s",bit_datatype,byte_datatype);
+    $display("---------------------------------");
+  endfunction
+  
+  function system_verilog_datatypes sv_copy;
+    sv_copy.bit_datatype=this.bit_datatype;
+    sv_copy.byte_datatype=this.byte_datatype;
+    sv_copy.vd=vd.v_copy;
+  endfunction
+  
+endclass
+
+module datatypes;
+  system_verilog_datatypes sv1;
+  system_verilog_datatypes sv2;
+  
+  initial
+    begin
+      $display("----------------------------------");
+      $display("---allocating the object of sv1---");
+      sv1=new();
+      $display("---------------------------------");
+      $display("----calling the display by sv1---");
+      sv1.display;
+      
+      $display("---allocating the object of sv2---");
+      sv2=new();
+      $display("---------------------------------");
+      $display("----calling the display by sv2---");
+      sv2.display;
+      $display("---------------------------------");
+      
+      $display("------changing in the sv1---------");
+      sv1.byte_datatype="xx";
+      sv1.vd.wire_datatype="c";
+      $display("----after changing the value, calling the display by sv1---");
+      sv1.display;
+      
+      $display("------changing in the sv2---------");
+      sv2.bit_datatype=1;
+      sv2.vd.reg_datatype="e";
+      $display("----after changing the value, calling the display by sv2---");
+      sv2.display;
+    end  
+endmodule
+  
