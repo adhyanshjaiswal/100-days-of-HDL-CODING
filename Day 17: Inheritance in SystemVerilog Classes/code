@@ -1,0 +1,41 @@
+class parent_class;
+  int addr;
+  int data;
+  
+  function new();
+    addr=1;
+    data=2;
+  endfunction
+endclass
+
+class child_class extends parent_class;
+  int address;
+  int address_range;
+  
+  
+  function new();
+    address=9;
+  endfunction
+  
+  function void display();
+    $display("-----------------------------");
+    $display("addr=%0d,data=%0d",addr,data);
+    $display("address=%0d,address_range=%0d",address,address_range);
+    $display("------------------------------");
+  endfunction
+  
+endclass
+
+module inheritance_class;
+  child_class cc;
+  initial
+    begin
+      cc=new();
+      cc.display();
+      
+      $display("now overriding the class properties");
+      cc.data=6;
+      cc.address_range=4;
+      cc.display();
+    end
+endmodule
