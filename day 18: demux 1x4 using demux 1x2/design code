@@ -1,0 +1,22 @@
+module demux1_2(input i,s0,
+                output y0,y1);
+  
+  assign y0=~s0&i;
+  assign y1=s0&i;
+  
+endmodule
+
+module demux1_4(input i,s0,s1,
+                output y0,y1,y2,y3);
+  
+  wire w1,w2;
+  
+  assign w1=~s0&i;
+  assign w2=s0&i;
+  
+  assign y0=~s1&w1;
+  assign y1=s1&w1;
+  assign y2=~s1&w2;
+  assign y3=s1&w2;
+  
+endmodule
