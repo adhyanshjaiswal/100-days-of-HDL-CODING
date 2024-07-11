@@ -1,0 +1,74 @@
+module fork_join_examples;
+
+  task process_1;
+    begin
+      $display($time,"\tProcess-1 Started");
+      #5;
+      $display($time,"\tProcess-1 Finished");
+    end
+  endtask
+
+  task process_2;
+    begin
+      $display($time,"\tProcess-2 Started");
+      #20;
+      $display($time,"\tProcess-2 Finished");
+    end
+  endtask
+
+  task process_3;
+    begin
+      $display($time,"\tProcess-3 Started");
+      #10;
+      $display($time,"\tProcess-3 Finished");
+    end
+  endtask
+
+  initial begin
+    $display("-----------------------------------------------------------------");
+    
+    // Fork with join
+    fork
+      // Process-1 and Process-2 will run concurrently
+      process_1();
+      process_2();
+    join
+    $display($time,"\tBoth processes have finished.");
+
+    // Fork with join_any
+    // This will wait for any one of the processes to finish
+    fork
+      process_1();
+      process_2();
+      process_3();
+    join_any
+    $display($time,"\tAny one process has finished.");
+
+    // Fork with join_none
+    // This will not wait for any process to finish and will continue immediately
+    fork
+      process_1();
+      process_2();
+      process_3();
+    join_none
+    $display($time,"\tForked processes without waiting.");
+
+    // Using wait to wait for a specific condition
+    // In this case, we wait for process_3 to finish
+    wait fork;
+      $display($time,"\tall Process has finished.");
+
+    // Disable a specific fork
+    // This will disable the fork that contains process_1 and process_2
+    fork
+      process_1();
+      process_2();
+    join_none
+    disable fork; // fork_handle is the name of the fork
+
+    // Finish the simulation
+    $display("-----------------------------------------------------------------");
+    $finish;
+  end
+
+endmodule
