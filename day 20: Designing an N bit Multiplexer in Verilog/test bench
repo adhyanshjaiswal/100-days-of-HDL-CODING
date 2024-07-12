@@ -1,0 +1,41 @@
+module mux_nx1_tb;
+  localparam N = 3; // Number of select lines
+  localparam P = 1<<N; // Number of inputs (2^N)
+  
+  // Testbench signals
+  reg [N-1:0] sel;
+  reg [P-1:0] in;
+  wire y;
+  
+  mux_nx1 #(.N(N)) DUT(.sel(sel),.in(in),.y(y));
+  
+  initial begin
+    sel = 0;
+    in = 14'b111101010110; // Assuming P is 14 bits; adjust as needed
+    
+    for (int i = 0; i < P; i++) begin
+      sel = i;
+      #10; 
+      if (y == in[i]) 
+        $display("Test %0d: success", i);
+      else 
+        $display("Test %0d: failed", i);
+    end
+    
+    // Fail case: Set input to 1 but check for 0
+    sel = 3'd3; // Set select line to choose input 3
+    in[3] = 1'b1; // Set input 3 to 1
+    #10; 
+    if (y == 1'b0) 
+      $display("Fail Case: success"); // Expecting failure here
+    else 
+      $display("Fail Case: failed"); // This should be printed
+    
+
+    #10 $finish;
+  end
+
+  initial 
+    $monitor("sel = %b, in = %b, y = %b", sel, in, y);
+  
+endmodule
