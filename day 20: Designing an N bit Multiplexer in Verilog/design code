@@ -1,0 +1,12 @@
+`timescale 1ns / 1ps
+
+module mux_nx1 #(parameter N = 3)(
+    input [N-1:0] sel,
+    input [(1<<N)-1:0] in,
+    output reg y
+);
+  always @(*) begin
+    y = in[sel];
+  end
+endmodule
+
