@@ -1,0 +1,21 @@
+module swap_by_blocking;
+    reg [7:0] a, b, temp; // 8-bit registers for demonstration
+
+    initial 
+      begin
+        a = 8'd10;
+        b = 8'd20;
+        $display("***************************");
+        $display("By Blocking assignment");
+      
+        $display("Before Swap: a = %d, b = %d", a, b);
+
+        // Swapping using a temporary variable
+        temp = a;
+        a = b;
+        b = temp;
+
+        $display("After Swap: a = %d, b = %d", a, b);
+        $display("***************************");
+    end
+endmodule
