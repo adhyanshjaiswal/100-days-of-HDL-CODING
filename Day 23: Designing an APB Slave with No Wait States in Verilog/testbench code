@@ -1,0 +1,101 @@
+module apb_tb;
+  reg pclk;
+  reg presetn;
+  reg [31:0] paddr;
+  reg pwrite;
+  reg pselx;
+  reg penable;
+  reg [31:0] pwdata;
+  
+  wire [31:0] prdata;
+  wire pready;
+  wire pslverr;
+  
+  apb_slave slave(.pclk(pclk),.presetn(presetn),.paddr(paddr),.pwrite(pwrite),.pselx(pselx),.penable(penable),.pwdata(pwdata),.prdata(prdata),.pready(pready),.pslverr(pslverr));
+  
+  always #5 pclk=~pclk;
+  
+  
+  initial
+    begin
+      pclk=0;//initialize the initial value to clock
+      //reset condition
+      presetn=0;
+   
+      //apply reset
+      #2 presetn=1;   //2
+      
+      #3;     //5
+      paddr =32'b0;
+      pwrite=0;
+      pselx=0;
+      penable=0;
+      pwdata=32'b0;
+      
+      #10;   //15
+      //write transcation in setup state
+      paddr=32'b1011;
+      pwrite=1;
+      pwdata=32'b1111;
+      pselx=1;
+      penable=0;
+      
+      #10;   //25
+      penable=1;
+      pwrite=1;
+      
+       #10;    //35
+      //deasserted
+      pselx=0;
+      penable=0;
+      pwrite=1;     //because of write transfer executing after 35 time
+      //pwdata=32'b0; //because of write transfer executing after 35 time
+      
+      #1 pwdata=0;
+      pwrite=0;
+
+       
+      #9;    //45
+      //read transcation in setup state
+      paddr=32'b1011;
+      pwrite=0;
+      pselx=1;
+      penable=0;
+      
+      #10;  //55
+      //read transcation in access state
+      penable=1;
+      pwrite=0;
+      
+       #10;  //65
+      pselx=0;
+      penable=0;
+      
+      
+       //wait for slave to be ready and check read data
+      while (!pready) #10;
+//       $display("-----------------------------------------------");
+//       $display("**** slave to be ready and check read data ****");
+//       $display("-----------------------------------------------");
+//       $display("paddr=%0d, pwdata=%0d, prdata=%0d",paddr,pwdata,prdata);
+//       $display("-----------------------------------------------");
+//       if (prdata == 32'b1111)
+//         $display("\t Succes:read data correct!");
+//       else
+//         $display("\t Error:read data incorrect!");
+//       $display("-----------------------------------------------");
+      
+//       // After each transaction in the testbench, check for pslverr
+//       if (pslverr)
+//         $display("\t Error: APB Slave reported an error!");
+//       $display("-----------------------------------------------");
+      
+      #80  $finish;       
+    end
+  initial
+    begin
+      $dumpfile("dump.vcd");
+      $dumpvars;
+    end
+  
+endmodule
