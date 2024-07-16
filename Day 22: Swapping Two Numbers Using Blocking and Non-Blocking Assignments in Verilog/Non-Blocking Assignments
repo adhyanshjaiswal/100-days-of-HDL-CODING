@@ -1,0 +1,19 @@
+module swap_by_non_blocking;
+    reg [7:0] a, b, temp; // 8-bit registers for demonstration
+
+    initial 
+      begin
+        $display("***************************");
+        $display("By Non Blocking assignment");
+        a = 8'd10; // Example values
+        b = 8'd20;
+        $display("Before Swap: a = %d, b = %d", a, b);
+
+        // Swapping without using a temporary variable
+        a <= b;
+        b <= a;
+
+        $display("After Swap: a = %d, b = %d", a, b);
+        $display("***************************");
+    end
+endmodule
