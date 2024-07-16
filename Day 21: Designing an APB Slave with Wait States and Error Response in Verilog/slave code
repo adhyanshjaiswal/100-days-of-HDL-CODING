@@ -1,0 +1,123 @@
+module apb_slave(
+    input wire pclk,
+    input wire presetn,
+    input wire [31:0] paddr,
+    input wire pwrite,
+    input wire pselx,
+    input wire penable,
+    input [31:0] pwdata,
+    
+    output reg [31:0] prdata,
+    output reg pready,
+    output reg pslverr
+);
+  
+  reg [31:0] slave_reg;
+  
+  reg [1:0] state;
+  
+  localparam idle_state   = 2'b00;
+  localparam setup_state  = 2'b01;
+  localparam access_state = 2'b11;
+  localparam wait_state = 2'b10;
+  
+  always @(posedge pclk or negedge presetn)
+    begin
+      if (!presetn)
+        begin          
+          slave_reg <= 32'b0;
+          state     <= idle_state; 
+          $display("step 0 !presetn", $time);
+        end
+      else
+        begin
+          case (state)
+            idle_state: begin
+              $display("step 1 idle", $time);
+              pready  = 1'b0;
+              pslverr = 1'b0;
+              prdata  = 32'b0;
+              
+              if (pselx && !penable) begin
+                state <= setup_state;
+                $display("step 2", $time);
+              end
+              else if (!pselx && !penable) begin
+                state <= idle_state;
+                $display("step 3", $time);
+              end 
+            end
+            
+            setup_state: begin 
+              $display("step 4", $time);
+              $display("PSELX=%0d, penable=%0d",pselx,penable, $time);
+              if (pselx && penable) begin
+                state <= wait_state;
+                $display("step 5", $time);
+                pready <=1'b0; 
+              end
+              else if (pselx && !penable) begin
+                state <= setup_state;
+                $display("step 6", $time);
+              end
+              
+            end
+            wait_state: begin
+              state <= access_state;
+              pready <=1'b1;
+              $display("PSELX=%0d, penable=%0d",pselx,penable, $time);
+              $display("step wait state start", $time);              
+              if(!pwrite)
+                  begin
+                    case (paddr)
+                      32'b1011: begin
+                        prdata = slave_reg;
+                        $display("step 11", $time);
+                        $display("rdata slave reg=%0d, rdata=%0d",slave_reg,prdata);
+                      end
+                      default: begin
+                        pslverr <= 1'b1;
+                        $display("step 12", $time);
+                      end
+                    endcase
+                  end
+            end
+            
+            access_state: begin
+              prdata <= 0;
+              pslverr <= 0;
+              $display("PSELX=%0d, penable=%0d",pselx,penable, $time);
+              $display("step access state start", $time);
+              
+              if (pwrite) begin
+                $display("step 7 prwite", $time);
+                $display("pwriteslave reg=%0d, pwdata=%0d",slave_reg,pwdata);
+                case (paddr)
+                  32'b1011: begin
+                    slave_reg = pwdata;
+                    $display("step 8", $time);
+                    $display("slave reg=%0d, pwdata=%0d",slave_reg,pwdata);
+                  end
+                  default: begin
+                    pslverr <= 1'b1;
+                    $display("step 9", $time);
+                  end
+                endcase
+              end
+              $display("PSELX=%0d, penable=%0d",pselx,penable, $time);
+              
+              if (pselx && penable) begin
+                state <= setup_state;
+                $display("step 13", $time);
+              end
+              else begin
+                state <= idle_state;
+                pready <= 0;
+                $display("step 14", $time);
+              end
+            end
+          endcase
+        end
+    end
+         
+endmodule
