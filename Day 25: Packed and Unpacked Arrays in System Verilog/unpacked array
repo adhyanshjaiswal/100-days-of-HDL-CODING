@@ -1,0 +1,14 @@
+module unpacked_array;
+  bit [0:3] parray [0:2][0:3] = '{'{4'h3,4'h4,4'h5,4'h6},'{4'h3,4'h4,4'h5,4'h6},'{4'h3,4'h4,4'h5,4'h6}};
+  
+  initial
+    begin
+      foreach(parray[i,j])
+        
+        begin
+          $display("parray[%0d][%0d]=%0d",i,j,parray[i][j]);
+        end
+    end
+  
+  
+endmodule
