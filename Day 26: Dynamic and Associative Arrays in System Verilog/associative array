@@ -1,0 +1,27 @@
+module associative_array;
+  int arr[*];
+  string a[int];
+
+  initial
+    begin
+      $display("********************************");
+      arr[5]=10;
+      arr[8]=24;
+      
+      $display("size of associative array,arr is %0d",arr.size());
+      foreach(arr[i])
+        begin
+          $display("arr[%0d]=%0d",i,arr[i]);
+        end
+      
+      a[2]="a good";
+      a[9]="of life";
+      a[3]="day";
+      $display("size of associative array,a is %0d",a.size());
+      foreach(a[j])
+        begin
+          $display("a[%0d]=%0s",j,a[j]);
+        end  
+      $display("********************************");
+    end
+endmodule
