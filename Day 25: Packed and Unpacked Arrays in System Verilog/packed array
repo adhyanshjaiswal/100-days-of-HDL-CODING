@@ -1,0 +1,12 @@
+module packed_array;
+  wire [0:2][0:3] parray = '{4'h3,4'h4,4'h5};   
+  initial
+    begin
+      foreach(parray[i])
+        begin
+          $display("packed array[%0d]=%0d",i,parray[i]);
+        end
+    end
+  
+  
+endmodule
