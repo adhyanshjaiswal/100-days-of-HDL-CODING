@@ -1,0 +1,25 @@
+module dynamic_array;
+  int darray[];
+  int j;
+  
+  initial
+    begin
+      $display("********************************");
+      darray = new[2];
+      $display("size of dynamic array is %0d", darray.size());
+      foreach (darray[i])
+        begin
+          darray[i] = i + 6;
+          $display("darray[%0d]=%0d", i, darray[i]);
+        end
+
+      darray = new[4](darray);
+      $display("resize of dynamic array is %0d", darray.size());
+      
+      for (j = 0; j < darray.size(); j = j + 1)
+        begin
+          $display("darray[%0d]=%0d", j, darray[j]);
+        end
+      $display("********************************");
+    end
+endmodule
