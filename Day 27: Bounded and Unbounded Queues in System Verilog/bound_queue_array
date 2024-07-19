@@ -1,0 +1,27 @@
+module bound_queue_array;
+  string bound_queue[$:4];
+  int varf,varb;
+  initial
+    begin
+      $display("*********************************");
+      bound_queue={"good","bad","luck","nice","awesome"};
+      
+      $display("size of bound_queue is %0d",bound_queue.size());
+      bound_queue.insert(1,"insert");
+      bound_queue.delete(4);
+      bound_queue.push_front("push front");
+      //bound_queue.push_back("push back"); //wll not reflect
+      varf=bound_queue.pop_front();//delete first element
+      varb=bound_queue.pop_back(); //delete last element
+      
+      
+      foreach(bound_queue[i])
+        begin
+          $display("bound_queue[%0d]=%0s",i,bound_queue[i]);
+        end
+      
+      $display("unbound queue, value of varf=%0d",varf);
+      $display("unbound queue, value of varb=%0d",varb);
+      $display("*********************************");
+    end 
+endmodule
