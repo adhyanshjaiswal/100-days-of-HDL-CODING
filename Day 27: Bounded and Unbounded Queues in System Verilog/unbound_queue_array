@@ -1,0 +1,25 @@
+module unbound_queue_array;
+  int unbound_queue[$];
+  int varf,varb;
+  
+  initial
+    begin
+      $display("*********************************");
+      unbound_queue={89,67,23,99,11,0};
+      
+      $display("size of unbound queue is %0d",unbound_queue.size());
+      unbound_queue.insert(1,9);
+      unbound_queue.delete(4);
+      unbound_queue.push_front(66);
+      unbound_queue.push_back(100);
+      varf=unbound_queue.pop_front();
+      varb=unbound_queue.pop_back();
+      foreach(unbound_queue[i])
+        begin
+          $display("unbound queue[%0d]=%0d",i,unbound_queue[i]);
+        end
+      $display("unbound queue, value of varf=%0d",varf);
+      $display("unbound queue, value of varb=%0d",varb);
+      $display("*********************************");
+    end 
+endmodule
