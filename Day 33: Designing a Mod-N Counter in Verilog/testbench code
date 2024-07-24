@@ -1,0 +1,30 @@
+module testbench;
+  parameter N=4;
+  parameter width=2;
+  
+  reg clk,resetn;
+  wire [width-1:0]out;
+  
+  mod_n_counter mod_n(.clk(clk),.resetn(resetn),.out(out));
+  
+  always #10 clk=~clk;
+  
+  initial
+    begin
+      clk=0;
+      resetn=0;
+      
+      $monitor("time=%0t, resetn=%0d, out=%0d",$time,resetn,out);
+      repeat(2)
+        @(posedge clk);
+      
+      resetn = 1;
+      
+      repeat(2*N) 
+        @(posedge clk);
+      
+      $finish;
+      
+      
+    end
+endmodule
