@@ -1,0 +1,20 @@
+module half_adder(input a,b,
+                  output sum,cout);
+  
+  assign sum=a^b;
+  assign cout=a*b;
+  
+endmodule
+
+`include "half_adder.sv"
+
+module full_adder(input a,b,c,
+                  output sum,cout);
+  wire sh,ch1,ch2;
+  half_adder h1(a,b,sh,ch1);
+  half_adder h2(sh,c,sum,ch2);
+  or o1(cout,ch1,ch2);
+  
+endmodule
+
+  
