@@ -1,0 +1,33 @@
+module four_bit_adder_subtractor_tb;
+  reg [3:0]a;
+  reg [3:0]b;
+  reg ctrl;
+  wire [3:0]sum;
+  wire cout;
+  wire [4:0]sum_out;
+  
+  four_bit_adder_subtractor dut(.a(a),.b(b),.ctrl(ctrl),.sum(sum),.cout(cout),.sum_out(sum_out));
+  
+  initial
+    begin
+      $monitor("a=%0d  b=%0d ctrl=%0d   total=%0d",a,b,ctrl,sum_out);
+      $display("***********************************");
+      #10 a=4'b0000; b=4'b0000; ctrl=0;
+      #10 a=4'b0101; b=4'b0010; ctrl=0;
+      #10 a=4'b0101; b=4'b0010; ctrl=1; 
+      #10 a=4'b1001; b=4'b1000; ctrl=1;
+      #10 a=$random; b=$random; ctrl=0;
+      #10 a=$random; b=$random; ctrl=0;
+      #10 a=$random; b=$random; ctrl=0;
+      #10 a=$random; b=$random; ctrl=1;
+      #10 a=$random; b=$random; ctrl=1;
+      #10 a=$random; b=$random; ctrl=1;
+      #10 a=$random; b=$random; ctrl=1;
+      $display("***********************************");
+    end 
+  initial
+    begin
+      $dumpfile("dump.vcd");
+      $dumpvars;
+    end
+endmodule
