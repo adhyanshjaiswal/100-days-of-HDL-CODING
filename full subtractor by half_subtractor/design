@@ -1,0 +1,20 @@
+module half_subtractor(input a,b,
+                       output diff,bout
+                      );
+  assign diff = a^b;
+  assign bout = ~a*b;
+  
+endmodule
+
+  `include "half_subtractor.sv"
+
+module full_subtractor(input a,b,c,
+                       output diff,bout);
+  
+  wire d1,bo1,bo2;
+  
+  half_subtractor h1(a,b,d1,bo1);
+  half_subtractor h2(d1,c,diff,bo2);
+  or o1(bout,bo1,bo2);
+  
+endmodule
