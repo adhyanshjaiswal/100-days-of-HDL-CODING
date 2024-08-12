@@ -1,0 +1,44 @@
+module full_adder(input a,b,c,
+                  output sum,cout);
+  
+  assign sum=a^b^c;
+  assign cout=a*b+b*c+c*a;
+  
+endmodule
+
+  `include "full_adder.sv"
+
+module four_bit_adder_subtractor(input [3:0] a,
+                                 input [3:0] b,
+                                 input ctrl,
+                                 output [3:0]sum,
+                                 output cout,
+                                 output reg [4:0]sum_out
+                                );
+  wire c0,c1,c2;
+  
+  xor r1(x0,b[0],ctrl);
+  full_adder f1(x0,a[0],ctrl,sum[0],c0);
+  
+  xor r2(x1,b[1],ctrl);
+  full_adder f2(x1,a[1],c0,sum[1],c1);
+  
+  xor r3(x2,b[2],ctrl);
+  full_adder f3(x2,a[2],c1,sum[2],c2);
+  
+  xor r4(x3,b[3],ctrl);
+  full_adder f4(x3,a[3],c2,sum[3],cout);
+  
+  always @(*)
+    begin
+      if(ctrl == 0)
+        begin
+          sum_out={cout,sum};
+        end
+      else
+        begin
+          sum_out=sum;
+        end
+    end
+  
+endmodule
