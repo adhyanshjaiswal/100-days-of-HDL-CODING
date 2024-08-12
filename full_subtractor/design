@@ -1,0 +1,7 @@
+module full_subtractor(input a,b,c,
+                       output diff,bout
+                      );
+  assign diff = a^b^c;
+  assign bout = ~(a^b)*c + ~a*b;
+  
+endmodule
