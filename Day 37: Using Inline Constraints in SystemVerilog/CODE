@@ -1,0 +1,25 @@
+https://edaplayground.com/x/tpEL
+
+class packet;
+  rand bit [6:0] addr;
+  rand bit [6:0] data;
+  
+  constraint data_range {data > 3; data < 20; }
+  
+endclass
+
+module inline_constraints;
+  initial
+    begin
+      packet pkt=new();
+      
+      repeat(2) 
+        begin
+          pkt.randomize() with {addr == 22 ;};
+          $display("addr=%0d,data=%0d",pkt.addr,pkt.data);
+        end
+      
+    end
+  
+endmodule
+  
