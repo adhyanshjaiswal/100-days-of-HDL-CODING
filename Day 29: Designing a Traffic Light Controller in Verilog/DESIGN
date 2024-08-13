@@ -1,0 +1,153 @@
+https://edaplayground.com/x/JUP7
+
+module TRAFFIC_LIGHT_CONTROLLER(
+    input clk, 
+    input reset,
+    input emergency_vehicle,
+    input left_turn_north,
+    input left_turn_south,
+    input left_turn_east,
+    input left_turn_west,
+    output reg [2:0] light_m1,
+    output reg [2:0] light_m2,
+    output reg [2:0] light_mt,
+    output reg [2:0] light_s,
+    output reg [2:0] light_m1_left,
+    output reg [2:0] light_m2_left,
+    output reg [2:0] light_mt_left
+);
+
+// State definitions
+parameter s1=0, s2=1, s3=2, s4=3, s5=4, s6=5; 
+// Time durations for different states
+parameter sec7=7, sec5=5, sec2=2, sec3=3; 
+  
+// State variables
+reg [3:0] count;  // Counter for timing
+reg [2:0] ct;     // Current state
+  
+// Emergency vehicle priority flag
+reg emergency_priority;
+  
+// Initialize state and counter
+always @(posedge clk or posedge reset) begin
+    if (reset) begin
+        ct <= s1;
+        count <= 0;
+    end
+    else begin
+        case (ct)
+            s1: if (count < sec7) begin
+                    ct <= s1;
+                    count <= count + 1;
+                end
+                else begin
+                    ct <= s2;
+                    count <= 0;
+                end
+            s2: if (count < sec2) begin
+                    ct <= s2;
+                    count <= count + 1;
+                end
+                else begin
+                    ct <= s3;
+                    count <= 0;
+                end
+            s3: if (count < sec5) begin
+                    ct <= s3;
+                    count <= count + 1;
+                end
+                else begin
+                    ct <= s4;
+                    count <= 0;
+                end
+            s4: if (count < sec2) begin
+                    ct <= s4;
+                    count <= count + 1;
+                end
+                else begin
+                    ct <= s5;
+                    count <= 0;
+                end
+            s5: if (count < sec3) begin
+                    ct <= s5;
+                    count <= count + 1;
+                end
+                else begin
+                    ct <= s6;
+                    count <= 0;
+                end
+            s6: if (count < sec2) begin
+                    ct <= s6;
+                    count <= count + 1;
+                end
+                else begin
+                    ct <= s1;
+                    count <= 0;
+                end
+            default: ct <= s1;
+        endcase
+    end
+end
+  
+// Traffic light control logic based on the current state
+always @* begin
+    case (ct)
+        s1: begin
+                light_m1 = 3'b001;
+                light_m2 = 3'b001;
+                light_mt = 3'b100;
+                light_s = 3'b100;
+            end
+        s2: begin
+                light_m1 = 3'b001;
+                light_m2 = 3'b010;
+                light_mt = 3'b100;
+                light_s = 3'b100;
+            end
+        s3: begin
+                light_m1 = 3'b001;
+                light_m2 = 3'b100;
+                light_mt = 3'b001;
+                light_s = 3'b100;
+            end
+        s4: begin
+                light_m1 = 3'b001;
+                light_m2 = 3'b010;
+                light_mt = 3'b100;
+                light_s = 3'b100;
+            end
+        s5: begin
+                light_m1 = 3'b100;
+                light_m2 = 3'b100;
+                light_mt = 3'b100;
+                light_s = 3'b001;
+            end
+        s6: begin
+                light_m1 = 3'b010;
+                light_m2 = 3'b100;
+                light_mt = 3'b010;
+                light_s = 3'b100;
+            end
+        default: begin
+                    light_m1 = 3'b000;
+                    light_m2 = 3'b000;
+                    light_mt = 3'b000;
+                    light_s = 3'b010;
+                end
+    endcase
+    
+    // Emergency vehicle priority
+    if (emergency_vehicle) begin
+        emergency_priority = 1;
+        light_m1 = 3'b100; // Change main road lights to give way
+        light_m2 = 3'b100;
+        light_mt = 3'b001; // Pedestrian light becomes red
+        light_s = 3'b100;
+    end
+    else
+        emergency_priority = 0;
+    
+end
+
+endmodule
