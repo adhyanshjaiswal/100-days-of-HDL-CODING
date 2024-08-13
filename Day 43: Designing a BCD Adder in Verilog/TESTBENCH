@@ -1,0 +1,20 @@
+module bcd_adder_tb;
+  reg [3:0] tn1,tn2;
+  wire [4:0] tbcd;
+  
+  bcd_adder bcda(.n1(tn1),.n2(tn2),.bcd(tbcd));
+  
+  initial
+    begin
+      $monitor($time,"tn1=%b,tn2=%b,tbcd=%b",tn1,tn2,tbcd);
+      #1 tn1=4'b0010; tn2=4'b0010;
+      #1 tn1=4'b0110; tn2=4'b1110;
+      #1 tn1=4'b1010; tn2=4'b0111;
+      #1 tn1=4'b0011; tn2=4'b0100;
+    end
+    initial
+    begin
+      $dumpfile("dump.vcd");
+      $dumpvars;
+    end
+endmodule
