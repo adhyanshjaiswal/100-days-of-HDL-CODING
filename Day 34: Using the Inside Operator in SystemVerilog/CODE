@@ -1,0 +1,28 @@
+https://edaplayground.com/x/SHcp
+
+class packet;
+  rand int addr;
+  
+  constraint addr_range {addr inside {[10:12],6,1,[2:4],0};}
+  
+  function void display;
+    $display("addr=%0d",addr);
+  endfunction
+  
+endclass
+
+
+module inside_class;
+  packet pkt;
+  
+  initial
+    begin
+      pkt=new();
+      repeat(10)
+        begin
+          pkt.randomize();
+          pkt.display;
+        end
+    end
+  
+endmodule
