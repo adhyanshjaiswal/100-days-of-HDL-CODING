@@ -1,0 +1,26 @@
+module four_bit_comparator(input [3:0] a,b,
+                           output reg a_grt_b,a_less_b,a_eq_b);
+  
+  always @(*)
+    begin
+      a_grt_b=0;
+      a_less_b=0;
+      a_eq_b=0;
+      if(a>b)
+        begin
+          a_grt_b=1;
+          $display("a is greater than b");
+        end
+      else if(a<b)
+        begin
+          a_less_b=1;
+          $display("a is  less  than  b");
+        end
+      else
+        begin
+          a_eq_b=1;
+          $display("a is equal  than  b");
+        end
+    end
+  
+endmodule
