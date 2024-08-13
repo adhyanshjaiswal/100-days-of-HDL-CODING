@@ -1,0 +1,23 @@
+module binary_multiplication_tb;
+  reg [3:0] tn1,tn2;
+  wire [7:0] tbmul;
+  
+  
+  binary_multiplication bm(.n1(tn1),.n2(tn2),.bmul(tbmul));
+
+initial
+    begin
+      $monitor($time,"n1=%b,n1=%d,   n2=%d,n2=%b,\ttbmul=%b,tbmul=%d",tn1,tn1,tn2,tn2,tbmul,tbmul);
+      #1 tn1=4'b1100; tn2=4'b0110;
+      #1 tn1=4'b1100; tn2=4'b1010;
+      #1 tn1=4'b0110; tn2=4'b0110;
+      #1 tn1=4'b0101; tn2=4'b0011;
+      #1 tn1=4'b0100; tn2=4'b0110;
+      #1 tn1=4'b1110; tn2=4'b1010;
+    end
+  initial
+    begin
+      $dumpfile("dump.vcd");
+      $dumpvars;
+    end
+endmodule
