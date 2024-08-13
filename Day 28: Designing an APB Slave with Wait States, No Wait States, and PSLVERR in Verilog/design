@@ -1,0 +1,171 @@
+module apb_slave(pclk, preset, paddr, psel, penable, pwrite, pwdata, prdata, pready, pslverr);
+
+  //inputs of slave
+  input pclk;
+  input preset;
+  input psel;
+  input penable;
+  input pwrite;
+  input [31:0] paddr;       //address bus - 32 bits wide
+  input [31:0] pwdata;      //write data bus - 32 bits wide
+  //outputs of slave
+  output reg [31:0] prdata; //read data bus - 32 bits wide
+  output reg pready;
+  output reg pslverr;
+
+  reg [1:0] state;  //3 operating states 
+
+  parameter idle_state = 2'b00;
+  parameter setup_state = 2'b01;
+  parameter access_state = 2'b10;
+  
+  reg [31:0] mem [31:0];  //memory having 32 elements each 32 bits wide
+
+  //parameter wait_for_cycles = 4'd1;  //waiting for 2 cycles, we can adjust this also 
+  
+  // for wait state
+  integer wait_for_cycles_var; 
+  
+  initial
+  begin
+    if($value$plusargs("wait_for_cycles=%d", wait_for_cycles_var))
+      $display("wait_for_cycles_var = %0d",wait_for_cycles_var);
+  end
+
+  
+
+  
+  always @(posedge pclk) begin 
+    //reset logic 
+    if (!preset) begin 
+      prdata <= 32'b0;
+      pready <= 0;
+      pslverr <= 0;
+      state <= idle_state;
+      $display("step 0 in preset",$time);
+      for (int i = 0; i < 32; i = i++) begin 
+        mem[i] <= 32'b0;  //Initialize memory content to zeros
+      end 
+    end 
+    else begin 
+      case (state)
+        idle_state: begin
+          $display("step 1 in idle",$time);
+          if (psel && !penable) begin 
+            state <= setup_state;
+            $display("step 2 in pselx && !penable in idle",$time);
+            //calling setup task
+            setup_s();
+          end else begin 
+            state <= idle_state;
+            $display("step 3 in !pselx && !penable  in idle",$time);
+            //calling idle task
+            idle_s();
+          end 
+        end
+        
+        setup_state: begin
+          $display("step 4 in setup",$time);
+          if (psel && penable) begin 
+            //wait conditions
+            if (wait_for_cycles_var > 0) begin
+              $display("step inside wait in setup",$time);
+              for(int i=0; i<(wait_for_cycles_var); i++) begin 
+                @(posedge pclk) pready = 0;
+              end
+            end
+            
+            $display("step after wait in setup",$time);
+            pready = 1;
+            //calling access task
+            access_s();
+            state = access_state;
+            $display("step 5 in setup",$time);
+          end 
+          else begin 
+            state <= setup_state;
+            //calling setup task
+            setup_s();
+            $display("step 6 in setup",$time);
+          end 
+        end
+        
+        access_state: begin
+          $display("step 7 in access",$time);
+          pready = 0;
+          pslverr=0;
+          
+          state = access_state;
+           
+           if(psel && !penable) begin
+             $display("step 8 in access",$time);
+            state<= setup_state;
+             //calling setup task
+            setup_s();
+          end 
+          
+          else begin 
+        	state<= idle_state;
+            $display("step 9 in access",$time);
+            //calling idle task
+        	idle_s();
+    	  end 
+          
+        end
+        
+        default: begin 
+          state <= idle_state;
+          $display("step 10 in access",$time);
+          //calling idle task
+          idle_s();
+        end 
+      endcase
+    end
+  end
+
+  task idle_s(); //idle state 
+    begin  
+      $display("step idle task",$time);
+      pready <= 0; 
+      prdata <= 32'b0;
+    end 
+  endtask 
+  
+  task setup_s();  //setup state
+    begin 
+      $display("step setup task",$time);
+      prdata <= 32'b0;
+      pready <= 0;
+    end 
+  endtask 
+  
+  task access_s(); //access state 
+    begin 
+      $display("step access task",$time);
+      if (pwrite) begin  //write operation
+        if(paddr == 32'd11) begin
+          $display("step access task write",$time); 
+          mem[paddr] = pwdata;// data is transfer from write data to temporary memory
+          $display("value of pwdata=%0d ",pwdata); 
+          $display("value of mem[addr]=%0d ",mem[paddr]); 
+        end
+        else begin
+          pslverr=1; //if addr is not match then pslverr will be high
+        end
+      end 
+      else begin   //read operation
+        if(paddr == 32'd11) begin
+          $display("step access task read",$time); 
+          prdata = mem[paddr]; // data is transfer from temporary memory to read data
+          $display("value of mem[addr]=%0d ",mem[paddr]); 
+          $display("value of prdata=%0d ",prdata); 
+        end
+        else begin
+          pslverr=1; //if addr is not match then pslverr will be high
+        end
+       
+      end
+    end 
+  endtask
+
+endmodule
