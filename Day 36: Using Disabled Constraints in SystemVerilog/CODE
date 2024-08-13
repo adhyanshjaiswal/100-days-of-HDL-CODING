@@ -1,0 +1,37 @@
+https://edaplayground.com/x/GvJv
+
+class packet;
+  rand bit [3:0] addr;
+  
+  constraint address_range {addr < 5 ; }
+
+endclass
+
+module m;
+  packet pkt;
+  initial
+    begin
+      pkt=new();
+      repeat(2)
+        begin
+          pkt.randomize;
+            $display("addr=%0d",pkt.addr);
+        end
+      pkt.address_range.constraint_mode(0);
+      $display("constraint_mode(0)");
+      repeat(2)
+        begin
+          pkt.randomize;
+            $display("addr=%0d",pkt.addr);
+        end
+      pkt.address_range.constraint_mode(1);
+      $display("constraint_mode(1)");
+      repeat(2)
+        begin
+          pkt.randomize;
+            $display("addr=%0d",pkt.addr);
+        end
+    end
+  
+endmodule
+
