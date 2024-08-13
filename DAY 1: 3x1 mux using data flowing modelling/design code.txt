@@ -1,6 +1,0 @@
-module mux_3x1(input  [0:1]a,[0:1]b,[0:1]c,s1,s0,
-               output [0:1]y);
-  
-  assign y=(~s1 & ~s0 & a) | (~s1 & s0 & b) | (s1 & ~s0 & c);
-  
-endmodule
