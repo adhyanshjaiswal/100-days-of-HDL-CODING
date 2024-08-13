@@ -1,0 +1,38 @@
+https://edaplayground.com/x/f4Ej
+
+class packet;
+  rand bit [3:0] addr;
+  string addr_range;
+  
+  
+  constraint address_range { (addr_range=="small") -> (addr <5);}
+  
+  function new();
+    addr_range="small";
+  endfunction
+  
+  function void display;
+    $display("addr_range=%0s addr=%0d",addr_range,addr);
+  endfunction
+  
+endclass
+
+module implication_operator;
+  packet pkt;
+  initial
+    begin
+      pkt=new();
+      repeat(3)
+        begin
+          pkt.randomize();
+          pkt.display();
+        end
+      $display();
+      repeat(3)
+        begin
+          pkt.randomize();
+          pkt.addr_range="not small";
+          pkt.display();
+        end
+    end
+endmodule
