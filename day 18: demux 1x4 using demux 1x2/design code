@@ -20,3 +20,16 @@ module demux1_4(input i,s0,s1,
   assign y3=s1&w2;
   
 endmodule
+
+module demux_1x4_using_demux_1x2(input i,s0,s1,
+                                 output y0,y1,y2,y3);
+  
+  wire w1,w2;
+  
+  demux_1x2 d1(i,s1,w1,w2);
+  demux_1x2 d2(w1,s0,y0,y1);
+  demux_1x2 d3(w2,s0,y2,y3);
+  
+  
+endmodule
+
