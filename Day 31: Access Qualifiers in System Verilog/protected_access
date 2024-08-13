@@ -1,0 +1,38 @@
+class protected_access_qaulifier_class;
+  int addr;
+  protected int data;
+  
+  function new();
+    addr=10;
+    data=9;
+  endfunction
+  
+   protected function void display();
+    $display("**********************");
+    $display("addr=%0d data=%0d",addr,data);
+    $display("**********************");
+  endfunction
+endclass
+
+class child_class extends protected_access_qaulifier_class;
+  int id;
+  
+  task calc;
+    id=addr*data;
+    display(); // child class is accessing protected access method of parent
+    $display("**********************");
+    $display("id=%0d",id);
+    $display("**********************");
+  endtask
+endclass
+
+module acces_example;
+  child_class cc;
+  initial
+    begin
+      cc=new();
+      cc.calc();
+    end
+endmodule
+  
+  
