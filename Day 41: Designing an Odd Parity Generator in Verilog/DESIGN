@@ -1,0 +1,8 @@
+https://edaplayground.com/x/gAmr
+
+module oddparity(
+  input a,b,c,
+  output p);
+  
+  assign p=~a^~b^~c;
+endmodule
