@@ -1,0 +1,24 @@
+module four_bit_comparator_tb;
+  reg [3:0] a,b;
+  wire a_grt_b,a_less_b,a_eq_b;
+  
+  four_bit_comparator comp(.a(a),.b(b),.a_grt_b(a_grt_b),.a_less_b(a_less_b),.a_eq_b(a_eq_b));
+  
+  initial
+    begin
+      repeat(5)
+        begin
+          $display("********************");
+          a=$random;
+          b=$random;
+          $display("     a=%0d,b=%0d    ",a,b);
+          #2;
+        end
+      $display("********************");
+    end
+  initial
+    begin
+      $dumpfile("dump.vcd");
+      $dumpvars;
+    end
+endmodule
