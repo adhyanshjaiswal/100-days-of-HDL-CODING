@@ -1,0 +1,36 @@
+https://edaplayground.com/x/w4qA
+class err_trans;
+  bit [7:0] addr;
+  int data;
+endclass
+
+class packet #(parameter int addr_width=8, type t=bit[7:0] , type e=err_trans);
+  bit [addr_width-1:0] ad;
+  t  da;
+  e add;
+   
+  function void display();
+    $display("*************************");
+    $display("\taddr=%0d data=%0d",add.addr,add.data);
+    $display("\tad=%0d, t=%0d",ad,da);
+    $display("*************************");
+  endfunction
+endclass
+
+module paraaa;
+  packet pkt;
+  initial
+    begin
+      pkt=new();
+      pkt.add=new();
+      pkt.ad=10;
+      pkt.da=11;
+      
+      pkt.display;
+      
+      pkt.add.addr=9;
+      pkt.add.data=7;
+      pkt.display;
+    end
+endmodule
+  
