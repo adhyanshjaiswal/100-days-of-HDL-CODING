@@ -1,0 +1,79 @@
+module TRAFFIC_LIGHT_CONTROLLER_TB;
+
+  // Inputs
+  reg clk;
+  reg reset;
+  reg emergency_vehicle;
+
+  // Outputs
+  wire [2:0] light_m1;
+  wire [2:0] light_m2;
+  wire [2:0] light_mt;
+  wire [2:0] light_s;
+
+  // Instantiate the traffic light controller module
+  TRAFFIC_LIGHT_CONTROLLER dut (
+    .clk(clk),
+    .reset(reset),
+    .emergency_vehicle(emergency_vehicle),
+    .light_m1(light_m1),
+    .light_m2(light_m2),
+    .light_mt(light_mt),
+    .light_s(light_s)
+  );
+
+  // Clock generation
+  initial begin
+    clk = 0;
+    forever #5 clk = ~clk; // Assuming 10 ns clock period
+  end
+
+  // Reset sequence
+  initial begin
+    reset = 1;
+    #10;
+    reset = 0;
+    #1000; // Simulate for 10000 ns
+    $finish;
+  end
+  
+
+  // Monitor to display traffic light states and colors
+  always @(light_m1, light_m2, light_mt, light_s) begin
+    // Define variables for colors
+    string m1_color, m2_color, mt_color, s_color;
+    // Assign colors based on binary representation
+    case ({light_m1, light_m2, light_mt, light_s})
+        4'b0010: m1_color = "Green";
+        4'b0100: m1_color = "Yellow";
+        4'b1000: m1_color = "Red";
+        default: m1_color = "Unknown";
+    endcase
+    case ({light_m1, light_m2, light_mt, light_s})
+        4'b0010: m2_color = "Green";
+        4'b0100: m2_color = "Yellow";
+        4'b1000: m2_color = "Red";
+        default: m2_color = "Unknown";
+    endcase
+    case ({light_m1, light_m2, light_mt, light_s})
+        4'b0010: mt_color = "Green";
+        4'b0100: mt_color = "Yellow";
+        4'b1000: mt_color = "Red";
+        default: mt_color = "Unknown";
+    endcase
+    case ({light_m1, light_m2, light_mt, light_s})
+        4'b0010: s_color = "Green";
+        4'b0100: s_color = "Yellow";
+        4'b1000: s_color = "Red";
+        default: s_color = "Unknown";
+    endcase
+    // Display time and traffic light states with colors
+    $display("time:%0t, Traffic Lights: M1 = %b, M2 = %b, MT = %b, S = %b", $realtime, light_m1, light_m2, light_mt, light_s);
+  end
+
+  initial begin
+    $dumpfile("dump.vcd");
+    $dumpvars;
+  end
+
+endmodule
