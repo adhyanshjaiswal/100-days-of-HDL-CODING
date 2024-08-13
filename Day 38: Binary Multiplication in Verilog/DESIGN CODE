@@ -1,0 +1,21 @@
+https://edaplayground.com/x/wR_L
+
+module binary_multiplication(input [3:0] n1,n2,
+                             output[7:0] bmul);
+  
+  wire [7:0] w1,w2,w3,w4,w5,w6,w7;
+  
+  assign w1=n1*n2[0];
+  assign w2=n1*n2[1];
+  assign w5=w2<<1;
+  assign w3=n1*n2[2];
+  assign w6=w3<<2;
+  assign w4=n1*n2[3];
+  assign w7=w4<<3;
+  
+  assign bmul= w1+w5+w6+w7;
+  
+  
+  
+  
+endmodule
