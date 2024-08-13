@@ -1,0 +1,28 @@
+https://edaplayground.com/x/wRmu
+
+class transaction;
+  int data;
+  static int addr;
+  
+  function data_f(int data);
+    $display("value of data=%0d",data);
+  endfunction
+  
+  static function addr_f(int addr);
+    $display("value of addr=%0d",addr);
+  endfunction
+  
+endclass
+
+module scope_resolution_operator_example;
+  
+  initial
+    begin
+      transaction::addr=9;
+      transaction::addr_f(transaction::addr);
+      
+     // transaction::data=11;  //illegal //Hierarchical reference to automatic variable 'data' is not legal
+      //transaction::data_f(transaction::data); Scoped reference to the non-static class task/function 'transaction::data_f'is not allowed.
+    end
+  
+endmodule
