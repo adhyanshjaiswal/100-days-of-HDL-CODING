@@ -1,0 +1,59 @@
+`define width 4
+module sync_fifo_tb;
+  reg clk;
+  reg reset;
+  reg [`width-1:0]data_in;
+  reg wr_en_i;
+  reg rd_en_i;
+  
+  wire [`width-1:0]data_o;
+  
+  sync_fifo dut(.clk(clk),.reset(reset),.data_in(data_in),.wr_en_i(wr_en_i),.rd_en_i(rd_en_i),.data_o(data_o));
+  
+  initial
+    clk=1;
+  
+  always #5 clk=~clk;
+  
+  initial
+    begin
+      reset=1;
+      @(posedge clk);
+      reset=0;
+      @(posedge clk);
+      reset=1;
+      //write data
+      wr_en_i=1;
+      rd_en_i=0;
+      repeat(`width)
+        begin
+          data_in=$random;
+          @(posedge clk);
+        end
+      
+      //read data
+      wr_en_i=0;
+      rd_en_i=1;
+      repeat(`width)
+        begin
+          @(posedge clk);
+        end
+      
+      //write data
+      wr_en_i=1;
+      rd_en_i=0;
+      repeat(4)
+        begin
+          data_in=$random;
+          @(posedge clk);
+        end
+    end
+  
+  initial
+    begin
+      $dumpfile("dump.vcd");
+      $dumpvars;
+      #150 $finish;
+    end
+  
+endmodule
