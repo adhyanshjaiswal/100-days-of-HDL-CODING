@@ -1,0 +1,20 @@
+class packet;
+  rand bit a;
+  rand byte b;
+  
+  constraint sab {solve a before b;}
+  constraint a_b {(a==1) -> b==0;}
+  
+endclass
+
+module solve_before_constraints;
+  initial
+    begin
+      packet pkt = new();
+      repeat(9)
+        begin
+          pkt.randomize;
+          $display("a=%0d  b=%0d",pkt.a,pkt.b);
+        end
+    end
+endmodule
