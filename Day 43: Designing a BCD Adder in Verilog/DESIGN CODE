@@ -1,0 +1,6 @@
+module bcd_adder(input [3:0] n1,n2,
+                 output [4:0] bcd);
+  
+  assign bcd=n1+n2;
+  
+endmodule
