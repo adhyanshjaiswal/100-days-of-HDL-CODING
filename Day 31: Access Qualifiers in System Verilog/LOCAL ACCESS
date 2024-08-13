@@ -1,0 +1,28 @@
+class local_access_qaulifier;
+  int addr;
+  local int data;
+  
+  function new();
+    addr=9;
+    data=9;
+    display();
+  endfunction
+  
+  local function void display();
+    $display("**********************");
+    $display("addr=%0d data=%0d",addr,data);
+    $display("**********************");
+  endfunction
+endclass
+
+//we can not use local variable of parent class in child class that will give compilation error
+
+module local_example;
+  local_access_qaulifier l_a;
+  initial
+    begin
+      l_a=new(); 
+      //l_a.data=10;   //we can not use local variable outside of class
+      //l_a.display();
+    end
+endmodule
