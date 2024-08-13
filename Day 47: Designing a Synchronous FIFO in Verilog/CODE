@@ -1,0 +1,51 @@
+`define width 4
+`define depth 8
+module sync_fifo(
+  input clk,
+  input reset,
+  input [`width-1:0]data_in,
+  
+  input wr_en_i,
+  input rd_en_i,
+  
+  output reg [`width-1:0]data_o,
+  output fifo_full,
+  output fifo_empty
+);
+  
+  reg [2:0] read_pointer;
+  reg [2:0] write_pointer;
+  reg [2:0] fifo_count;
+  reg [`width-1:0] fifo_mem [`depth-1:0];
+  
+  assign fifo_full = (fifo_count == `width) ? 1 : 0;
+  assign fifo_empty = (fifo_count == 0);
+  
+  
+  always @(posedge clk or negedge reset)
+    begin
+      if(!reset)
+        begin
+          write_pointer <= 0;
+          read_pointer <= 0;
+          fifo_count <= 0;
+        end
+      else if(wr_en_i && !fifo_full)
+        begin //write operation
+          fifo_mem[write_pointer] <= data_in;
+          write_pointer = write_pointer + 1;
+          fifo_count <= fifo_count+1;
+        end
+      else if(rd_en_i && !fifo_empty)
+        begin //read operation
+          data_o <= fifo_mem[read_pointer];
+          read_pointer <= read_pointer+1;
+          fifo_count <= fifo_count-1;
+        end
+      else //write, read enable and else
+        begin
+          fifo_count <= fifo_count;
+        end
+    end
+  
+endmodule
